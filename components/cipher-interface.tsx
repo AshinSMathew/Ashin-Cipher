@@ -27,7 +27,7 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
     setError(null)
     
     try {
-      const response = await fetch(`https://ashin-cipher.vercel.app/en/${encodeURIComponent(plaintext)}`)
+      const response = await fetch(`https://ashin-cipher-api.vercel.app/en/${encodeURIComponent(plaintext)}`)
       if (!response.ok) {
         throw new Error("Failed to encrypt text")
       }
@@ -51,7 +51,7 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
     setError(null)
     
     try {
-      const response = await fetch(`https://ashin-cipher.vercel.app/dec/${encodeURIComponent(ciphertext)}`)
+      const response = await fetch(`https://ashin-cipher-api.vercel.app/dec/${encodeURIComponent(ciphertext)}`)
       if (!response.ok) {
         throw new Error("Failed to decrypt text")
       }
