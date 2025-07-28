@@ -9,8 +9,6 @@ Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{te
 - Encrypt plaintext into ciphertext using /en/{text}
 - Decrypt ciphertext back to plaintext using /dec/{text}
 - Copy to Clipboard for easy sharing
-- Swap Fields between plaintext and ciphertext
-- Responsive UI with dark/light mode
 - Error Handling for invalid inputs
 
 ## Tech Stack
