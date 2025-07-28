@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASHIN CIPHER
+A secure encryption and decryption tool with a Python-based API `(ashin-cipher-api.vercel.app)`. This project includes:
 
-## Getting Started
+Frontend: A Next.js-based React UI for encryption/decryption.
 
-First, run the development server:
+Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{text} for decryption).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
+- Encrypt plaintext into ciphertext using /en/{text}
+- Decrypt ciphertext back to plaintext using /dec/{text}
+- Copy to Clipboard for easy sharing
+- Swap Fields between plaintext and ciphertext
+- Responsive UI with dark/light mode
+- Error Handling for invalid inputs
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
+#### Frontend
+- Next.js (React)
+- TypeScript
+- Tailwind CSS (Styling)
+- Shadcn/ui (UI Components)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Backend
+- Python (FastAPI/Flask)
+- Vercel Serverless Functions (Deployment)
 
-## Learn More
+## API Documentation
 
-To learn more about Next.js, take a look at the following resources:
+> **Development Notice**  
+> ⚠️ This API is currently in active development. While encryption/decryption functions are operational, you may encounter occasional issues, particularly with:
+> - Special characters in input text
+> - Very long messages (>500 characters)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Base URL
+`https://ashin-cipher-api.vercel.app`
 
-## Deploy on Vercel
+### Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Endpoint       | Method | Description                              | Example |
+|----------------|--------|------------------------------------------|---------|
+| `/en/{text}`   | `GET`  | Encrypts plaintext into ciphertext       | [`https://ashin-cipher-api.vercel.app/en/hello`](https://ashin-cipher-api.vercel.app/en/ashin) → `{"encrypted_message": "DIHIU"}` |
+| `/dec/{text}`  | `GET`  | Decrypts ciphertext back to plaintext    | [`https://ashin-cipher-api.vercel.app/dec/x23fG9`](https://ashin-cipher-api.vercel.app/dec/DIHIU) → `{"decrypted_message": "ashin"}` |
