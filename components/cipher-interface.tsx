@@ -5,10 +5,19 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, ShieldCheck } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { Loader2, ShieldCheck, Copy, Check } from "lucide-react"
 
 interface CipherInterfaceProps {
   className?: string
+}
+
+interface EncryptedResponse {
+  encrypted_message: string
+}
+
+interface DecryptedResponse {
+  decrypted_message: string
 }
 
 export default function CipherInterface({ className }: CipherInterfaceProps) {
@@ -16,6 +25,7 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
   const [ciphertext, setCiphertext] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [copiedField, setCopiedField] = useState<string | null>(null)
 
   const handleEncrypt = async () => {
     if (!plaintext.trim()) {
@@ -31,8 +41,8 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
       if (!response.ok) {
         throw new Error("Failed to encrypt text")
       }
-      const data = await response.text()
-      setCiphertext(data)
+      const data: EncryptedResponse = await response.json()
+      setCiphertext(data.encrypted_message)
     } catch (err) {
       setError("Failed to encrypt text. Please try again.")
       console.error("Encryption error:", err)
@@ -55,13 +65,24 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
       if (!response.ok) {
         throw new Error("Failed to decrypt text")
       }
-      const data = await response.text()
-      setPlaintext(data)
+      const data: DecryptedResponse = await response.json()
+      setPlaintext(data.decrypted_message)
     } catch (err) {
       setError("Failed to decrypt text. Please check the ciphertext and try again.")
       console.error("Decryption error:", err)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleCopy = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedField(field)
+      setTimeout(() => setCopiedField(null), 2000)
+    } catch (err) {
+      setError("Failed to copy to clipboard")
+      console.error("Copy error:", err)
     }
   }
 
@@ -73,7 +94,7 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
             <ShieldCheck className="h-6 w-6 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Ashin Cipher
+            ASHIN CIPHER
           </h1>
           <p className="text-lg text-muted-foreground">
             Encrypt and decrypt your messages with confidence
@@ -87,16 +108,33 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-            <Label htmlFor="plaintext" className="block text-lg font-medium mb-4">
-              Plaintext Input
-            </Label>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 min-h-[400px]">
+            <div className="flex items-center justify-between mb-4">
+              <Label htmlFor="plaintext" className="text-lg font-medium">
+                Plaintext Input
+              </Label>
+              {plaintext && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleCopy(plaintext, 'plaintext')}
+                  className="h-8 w-8 p-0 hover:bg-muted"
+                  aria-label="Copy plaintext"
+                >
+                  {copiedField === 'plaintext' ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+              )}
+            </div>
             <Textarea
               id="plaintext"
               placeholder="Enter your message to encrypt..."
               value={plaintext}
               onChange={(e) => setPlaintext(e.target.value)}
-              className="min-h-[300px] w-full border-border rounded-md p-4 text-base focus:ring-2 focus:ring-ring focus:border-primary"
+              className="min-h-[300px] w-full border-border rounded-md p-4 text-base focus:ring-2 focus:ring-ring focus:border-primary resize-none"
               aria-label="Plaintext input field for encryption"
             />
             <Button
@@ -115,16 +153,33 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
             </Button>
           </div>
 
-          <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-            <Label htmlFor="ciphertext" className="block text-lg font-medium mb-4">
-              Ciphertext Input
-            </Label>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 min-h-[400px]">
+            <div className="flex items-center justify-between mb-4">
+              <Label htmlFor="ciphertext" className="text-lg font-medium">
+                Ciphertext Input
+              </Label>
+              {ciphertext && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleCopy(ciphertext, 'ciphertext')}
+                  className="h-8 w-8 p-0 hover:bg-muted"
+                  aria-label="Copy ciphertext"
+                >
+                  {copiedField === 'ciphertext' ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+              )}
+            </div>
             <Textarea
               id="ciphertext"
               placeholder="Enter ciphertext to decrypt..."
               value={ciphertext}
               onChange={(e) => setCiphertext(e.target.value)}
-              className="min-h-[300px] w-full border-border rounded-md p-4 text-base focus:ring-2 focus:ring-ring focus:border-primary"
+              className="min-h-[300px] w-full border-border rounded-md p-4 text-base focus:ring-2 focus:ring-ring focus:border-primary resize-none"
               aria-label="Ciphertext input field for decryption"
             />
             <Button
@@ -142,6 +197,11 @@ export default function CipherInterface({ className }: CipherInterfaceProps) {
               )}
             </Button>
           </div>
+        </div>
+        {/* Footer */}
+        <div className="mt-12 text-center">
+          <Separator className="mb-6" />
+          <p className="text-sm text-muted-foreground">Powered by ASHIN CIPHER API • Secure • Fast • Reliable</p>
         </div>
       </div>
     </div>
