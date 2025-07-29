@@ -32,7 +32,7 @@ export default function EncryptComponent({ onResult, error, setError }: EncryptC
     setError(null)
 
     try {
-      const response = await fetch(`https://ashin-cipher-api.vercel.app/en/${plaintext}`)
+      const response = await fetch(`https://ashin-cipher-api.vercel.app/en?text=${plaintext}`)
       if (!response.ok) {
         throw new Error("Failed to encrypt text")
       }
