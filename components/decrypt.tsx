@@ -5,21 +5,23 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2 } from "lucide-react"
+import { Loader2, Copy, Check } from "lucide-react"
 
 interface DecryptedResponse {
   decrypted_message: string
 }
 
 interface DecryptComponentProps {
+  cipherKey: string
   onResult: (result: string) => void
   error: string | null
   setError: (error: string | null) => void
 }
 
-export default function DecryptComponent({ onResult, error, setError }: DecryptComponentProps) {
+export default function DecryptComponent({ cipherKey, onResult, error, setError }: DecryptComponentProps) {
   const [ciphertext, setCiphertext] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [copiedField, setCopiedField] = useState<string | null>(null)
 
   const handleDecrypt = async () => {
     if (!ciphertext.trim()) {
@@ -27,22 +29,39 @@ export default function DecryptComponent({ onResult, error, setError }: DecryptC
       return
     }
 
+    if (!cipherKey.trim()) {
+      setError("Please enter a key")
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`https://ashin-cipher-api.vercel.app/dec?text=${ciphertext}`)
+      const response = await fetch(
+        `https://ashin-cipher-api.vercel.app/dec/${cipherKey}?text=${ciphertext}`,
+      )
       if (!response.ok) {
         throw new Error("Failed to decrypt text")
       }
       const data: DecryptedResponse = await response.json()
-      console.log(data)
       onResult(data.decrypted_message)
     } catch (err) {
-      setError("Failed to decrypt text. Please check the ciphertext and try again.")
+      setError("Failed to decrypt text. Please check the ciphertext and key, then try again.")
       console.error("Decryption error:", err)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleCopy = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedField(field)
+      setTimeout(() => setCopiedField(null), 2000)
+    } catch (err) {
+      setError("Failed to copy to clipboard")
+      console.error("Copy error:", err)
     }
   }
 
@@ -59,6 +78,21 @@ export default function DecryptComponent({ onResult, error, setError }: DecryptC
           <Label htmlFor="ciphertext" className="text-lg font-medium">
             Ciphertext Input
           </Label>
+          {ciphertext && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleCopy(ciphertext, "ciphertext")}
+              className="h-8 w-8 p-0 hover:bg-muted"
+              aria-label="Copy ciphertext"
+            >
+              {copiedField === "ciphertext" ? (
+                <Check className="h-4 w-4 text-green-600" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          )}
         </div>
         <Textarea
           id="ciphertext"
@@ -70,7 +104,7 @@ export default function DecryptComponent({ onResult, error, setError }: DecryptC
         />
         <Button
           onClick={handleDecrypt}
-          disabled={isLoading || !ciphertext.trim()}
+          disabled={isLoading || !ciphertext.trim() || !cipherKey.trim()}
           className="w-full mt-4 py-3 px-4 bg-primary text-primary-foreground font-medium rounded-md hover:bg-[#dc2626] transition-colors disabled:cursor-not-allowed"
         >
           {isLoading ? (

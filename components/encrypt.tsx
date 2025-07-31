@@ -5,21 +5,23 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2 } from "lucide-react"
+import { Loader2, Copy, Check } from "lucide-react"
 
 interface EncryptedResponse {
   encrypted_message: string
 }
 
 interface EncryptComponentProps {
+  cipherKey: string
   onResult: (result: string) => void
   error: string | null
   setError: (error: string | null) => void
 }
 
-export default function EncryptComponent({ onResult, error, setError }: EncryptComponentProps) {
+export default function EncryptComponent({ cipherKey, onResult, error, setError }: EncryptComponentProps) {
   const [plaintext, setPlaintext] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [copiedField, setCopiedField] = useState<string | null>(null)
 
   const handleEncrypt = async () => {
     if (!plaintext.trim()) {
@@ -27,22 +29,39 @@ export default function EncryptComponent({ onResult, error, setError }: EncryptC
       return
     }
 
+    if (!cipherKey.trim()) {
+      setError("Please enter a key")
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`https://ashin-cipher-api.vercel.app/en?text=${plaintext}`)
+      const response = await fetch(
+        `https://ashin-cipher-api.vercel.app/en/${cipherKey}?text=${plaintext}`,
+      )
       if (!response.ok) {
         throw new Error("Failed to encrypt text")
       }
       const data: EncryptedResponse = await response.json()
-      console.log(data)
       onResult(data.encrypted_message)
     } catch (err) {
       setError("Failed to encrypt text. Please try again.")
       console.error("Encryption error:", err)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleCopy = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedField(field)
+      setTimeout(() => setCopiedField(null), 2000)
+    } catch (err) {
+      setError("Failed to copy to clipboard")
+      console.error("Copy error:", err)
     }
   }
 
@@ -59,6 +78,21 @@ export default function EncryptComponent({ onResult, error, setError }: EncryptC
           <Label htmlFor="plaintext" className="text-lg font-medium">
             Plaintext Input
           </Label>
+          {plaintext && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleCopy(plaintext, "plaintext")}
+              className="h-8 w-8 p-0 hover:bg-muted"
+              aria-label="Copy plaintext"
+            >
+              {copiedField === "plaintext" ? (
+                <Check className="h-4 w-4 text-green-600" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          )}
         </div>
         <Textarea
           id="plaintext"
@@ -70,7 +104,7 @@ export default function EncryptComponent({ onResult, error, setError }: EncryptC
         />
         <Button
           onClick={handleEncrypt}
-          disabled={isLoading || !plaintext.trim()}
+          disabled={isLoading || !plaintext.trim() || !cipherKey.trim()}
           className="w-full mt-4 py-3 px-4 bg-primary text-primary-foreground font-medium rounded-md hover:bg-[#dc2626] transition-colors disabled:cursor-not-allowed"
         >
           {isLoading ? (

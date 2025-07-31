@@ -38,5 +38,5 @@ Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{te
 
 | Endpoint       | Method | Description                              | Example |
 |----------------|--------|------------------------------------------|---------|
-| `/en/{text}`   | `GET`  | Encrypts plaintext into ciphertext       | [`https://ashin-cipher-api.vercel.app/en?text=ashin`](https://ashin-cipher-api.vercel.app/en?text=ashin) → `{"encrypted_message": "R?KNI"}` |
-| `/dec/{text}`  | `GET`  | Decrypts ciphertext back to plaintext    | [`https://ashin-cipher-api.vercel.app/dec?text=R?KNI`](https://ashin-cipher-api.vercel.app/dec?text=R?KNI) → `{"decrypted_message": "ashin"}` |
+| `/en/{text}`   | `GET`  | Encrypts plaintext into ciphertext       | [`https://ashin-cipher-api.vercel.app/en/{key}?text={plain-text}`](https://ashin-cipher-api.vercel.app/en/ashin?text=ashin) → `{"encrypted_message": "AK?KHXI"}` |
+| `/dec/{text}`  | `GET`  | Decrypts ciphertext back to plaintext    | [`https://ashin-cipher-api.vercel.app/dec?text={cipher-text}`](https://ashin-cipher-api.vercel.app/dec/ashin?text=AK?KHXI) → `{"decrypted_message": "ASHIN"}` |

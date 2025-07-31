@@ -6,9 +6,11 @@ import { Separator } from "@/components/ui/separator"
 import { ShieldCheck, Lock, Unlock, Check, Copy } from "lucide-react"
 import EncryptComponent from "@/components/encrypt"
 import DecryptComponent from "@/components/decrypt"
+import KeyInput from "@/components/key-input"
 
 export default function CipherPage() {
   const [mode, setMode] = useState<"encrypt" | "decrypt">("encrypt")
+  const [cipherKey, setCipherKey] = useState("")
   const [result, setResult] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [copiedField, setCopiedField] = useState<string | null>(null)
@@ -17,6 +19,15 @@ export default function CipherPage() {
     setResult(newResult)
   }
 
+  const handleKeyChange = (newKey: string) => {
+    setCipherKey(newKey)
+    setError(null)
+  }
+
+  const handleModeChange = (newMode: "encrypt" | "decrypt") => {
+    setMode(newMode)
+    setError(null)
+  }
   const handleCopy = async (text: string, field: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -39,13 +50,16 @@ export default function CipherPage() {
           <p className="text-lg text-muted-foreground">Encrypt and decrypt your messages with confidence</p>
         </div>
 
+        {/* Key Input Component */}
+        <KeyInput value={cipherKey} onChange={handleKeyChange} onError={setError} />
+
         {/* Toggle Buttons */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex rounded-lg border border-border bg-muted p-1">
             <Button
               variant={mode === "encrypt" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setMode("encrypt")}
+              onClick={() => handleModeChange("encrypt")}
               className="flex items-center gap-2 px-4 py-2"
             >
               <Lock className="h-4 w-4" />
@@ -54,7 +68,7 @@ export default function CipherPage() {
             <Button
               variant={mode === "decrypt" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setMode("decrypt")}
+              onClick={() => handleModeChange("decrypt")}
               className="flex items-center gap-2 px-4 py-2"
             >
               <Unlock className="h-4 w-4" />
@@ -66,9 +80,9 @@ export default function CipherPage() {
         {/* Component Display */}
         <div className="flex justify-center">
           {mode === "encrypt" ? (
-            <EncryptComponent onResult={handleResult} error={error} setError={setError} />
+            <EncryptComponent cipherKey={cipherKey} onResult={handleResult} error={error} setError={setError} />
           ) : (
-            <DecryptComponent onResult={handleResult} error={error} setError={setError} />
+            <DecryptComponent cipherKey={cipherKey} onResult={handleResult} error={error} setError={setError} />
           )}
         </div>
 
@@ -76,10 +90,11 @@ export default function CipherPage() {
         {result && (
           <div className="mt-8 max-w-2xl mx-auto">
             <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium">
-                  {mode === "encrypt" ? "Encrypted Result:" : "Decrypted Result:"}
-                </h3>
+              <h3 className="text-lg font-medium mb-4">
+                {mode === "encrypt" ? "Encrypted Result:" : "Decrypted Result:"}
+              </h3>
+              <div className="flex items-center justify-between bg-muted rounded-md p-4 font-mono text-sm break-all">
+                <span className="flex-1 pr-2">{result}</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -94,7 +109,6 @@ export default function CipherPage() {
                   )}
                 </Button>
               </div>
-              <div className="bg-muted rounded-md p-4 font-mono text-sm break-all">{result}</div>
             </div>
           </div>
         )}
@@ -103,11 +117,7 @@ export default function CipherPage() {
         {/* Footer */}
         <div className="mt-12 text-center">
           <Separator className="mb-6" />
-          <p className="text-sm text-muted-foreground">
-            Powered by 
-            <a  href="https://ashin-cipher-api.vercel.app/"><strong> ASHIN CIPHER API </strong></a> 
-            • Secure • Fast • Reliable
-          </p>
+          <p className="text-sm text-muted-foreground">Powered by ASHIN CIPHER API • Secure • Fast • Reliable</p>
         </div>
       </div>
     </div>
