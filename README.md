@@ -36,7 +36,7 @@ Endpoint: `/enc/`
 Method: `POST`
 
 Description: Encrypts plaintext into ciphertext using the Ashin Cipher algorithm
-    
+
 Request Body:
 ```json
 {
@@ -65,6 +65,7 @@ Endpoint: `/dec/`
 Method: `POST`
 
 Description: Decrypts ciphertext back to plaintext using the Ashin Cipher algorithm
+
 Request Body:
 ```json
 {
