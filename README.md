@@ -49,13 +49,13 @@ Example Request:
 ```bash
 curl -X POST "https://ashin-cipher-api.vercel.app/en/" \
 -H "Content-Type: application/json" \
--d '{"text": "hello world", "key": "secret123"}'
+-d '{"text": "{plain_text}", "key": "{cipher_key}"}'
 ```
 
 Example Response:
 ```json
 {
-    "encrypted_message": "AK?KHXI"
+    "encrypted_message": "{cipher_text}"
 }
 ```
 
@@ -78,12 +78,12 @@ Example Request:
 ```bash
 curl -X POST "https://ashin-cipher-api.vercel.app/decrypt/" \
 -H "Content-Type: application/json" \
--d '{"text": "AK?KHXI", "key": "secret123"}'
+-d '{"text": "{cipher_text}", "key": "{secret_key}"}'
 ```
 
 Example Response:
 ```json
 {
-    "decrypted_message": "HELLO WORLD"
+    "decrypted_message": "{plain_text}"
 }
 ```
