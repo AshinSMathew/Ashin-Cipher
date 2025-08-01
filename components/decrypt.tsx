@@ -39,7 +39,17 @@ export default function DecryptComponent({ cipherKey, onResult, error, setError 
 
     try {
       const response = await fetch(
-        `https://ashin-cipher-api.vercel.app/dec/${cipherKey}?text=${ciphertext}`,
+        `https://ashin-cipher-api.vercel.app/dec/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: ciphertext,
+            key: cipherKey,
+          })
+        }
       )
       if (!response.ok) {
         throw new Error("Failed to decrypt text")

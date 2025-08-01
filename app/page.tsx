@@ -43,9 +43,6 @@ export default function CipherPage() {
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-primary rounded-full mb-4">
-            <ShieldCheck className="h-6 w-6 text-primary-foreground" />
-          </div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">ASHIN CIPHER</h1>
           <p className="text-lg text-muted-foreground">Encrypt and decrypt your messages with confidence</p>
         </div>

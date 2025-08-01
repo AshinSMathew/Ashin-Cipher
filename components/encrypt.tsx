@@ -39,7 +39,17 @@ export default function EncryptComponent({ cipherKey, onResult, error, setError 
 
     try {
       const response = await fetch(
-        `https://ashin-cipher-api.vercel.app/en/${cipherKey}?text=${plaintext}`,
+        `https://ashhin-cipher-api.vercel.app/en/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: plaintext,
+            key: cipherKey,
+          }),
+        }
       )
       if (!response.ok) {
         throw new Error("Failed to encrypt text")
@@ -47,10 +57,10 @@ export default function EncryptComponent({ cipherKey, onResult, error, setError 
       const data: EncryptedResponse = await response.json()
       onResult(data.encrypted_message)
     } catch (err) {
-      setError("Failed to encrypt text. Please try again.")
-      console.error("Encryption error:", err)
+        setError("Failed to encrypt text. Please try again.")
+        console.error("Encryption error:", err)
     } finally {
-      setIsLoading(false)
+        setIsLoading(false)
     }
   }
 
