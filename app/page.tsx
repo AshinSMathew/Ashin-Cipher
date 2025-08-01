@@ -114,7 +114,9 @@ export default function CipherPage() {
         {/* Footer */}
         <div className="mt-12 text-center">
           <Separator className="mb-6" />
-          <p className="text-sm text-muted-foreground">Powered by ASHIN CIPHER API • Secure • Fast • Reliable</p>
+          <p className="text-sm text-muted-foreground">Powered by <strong>
+            <a href="https://ashin-cipher-api.vercel.app" target="_blank">ASHIN CIPHER API</a>
+            </strong> • Secure • Fast • Reliable</p>
         </div>
       </div>
     </div>
