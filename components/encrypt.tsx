@@ -39,7 +39,7 @@ export default function EncryptComponent({ cipherKey, onResult, error, setError 
 
     try {
       const response = await fetch(
-        `https://ashhin-cipher-api.vercel.app/en/`,
+        `https://ashin-cipher-api.vercel.app/en/`,
         {
           method: 'POST',
           headers: {
