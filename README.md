@@ -25,12 +25,6 @@ Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{te
 
 ## API Documentation
 
-> **Development Notice**  
-> ⚠️ This API is currently in active development. While encryption/decryption functions are operational, you may encounter occasional issues, particularly with:
-> - Special characters in input text
-> - Very long messages (>500 characters)
-
-
 ### Base URL
 `https://ashin-cipher-api.vercel.app`
 
@@ -38,8 +32,11 @@ Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{te
 
 #### 1. Encrypt Text
 Endpoint: `/enc/`
+
 Method: `POST`
+
 Description: Encrypts plaintext into ciphertext using the Ashin Cipher algorithm
+    
 Request Body:
 ```json
 {
@@ -64,7 +61,9 @@ Example Response:
 
 #### 2. Decrypt Text
 Endpoint: `/dec/`
+
 Method: `POST`
+
 Description: Decrypts ciphertext back to plaintext using the Ashin Cipher algorithm
 Request Body:
 ```json
