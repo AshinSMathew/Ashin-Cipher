@@ -36,7 +36,54 @@ Backend: A Python API with two endpoints (/en/{text} for encryption and /dec/{te
 
 ### Endpoints
 
-| Endpoint       | Method | Description                              | Example |
-|----------------|--------|------------------------------------------|---------|
-| `/en/{text}`   | `GET`  | Encrypts plaintext into ciphertext       | [`https://ashin-cipher-api.vercel.app/en/{key}?text={plain-text}`](https://ashin-cipher-api.vercel.app/en/ashin?text=ashin) → `{"encrypted_message": "AK?KHXI"}` |
-| `/dec/{text}`  | `GET`  | Decrypts ciphertext back to plaintext    | [`https://ashin-cipher-api.vercel.app/dec?text={cipher-text}`](https://ashin-cipher-api.vercel.app/dec/ashin?text=AK?KHXI) → `{"decrypted_message": "ASHIN"}` |
+#### 1. Encrypt Text
+Endpoint: `/enc/`
+Method: `POST`
+Description: Encrypts plaintext into ciphertext using the Ashin Cipher algorithm
+Request Body:
+```json
+{
+    "text": "string",
+    "key": "string"
+}
+```
+
+Example Request:
+```bash
+curl -X POST "https://ashin-cipher-api.vercel.app/en/" \
+-H "Content-Type: application/json" \
+-d '{"text": "hello world", "key": "secret123"}'
+```
+
+Example Response:
+```json
+{
+    "encrypted_message": "AK?KHXI"
+}
+```
+
+#### 2. Decrypt Text
+Endpoint: `/dec/`
+Method: `POST`
+Description: Decrypts ciphertext back to plaintext using the Ashin Cipher algorithm
+Request Body:
+```json
+{
+    "text": "string",
+    "key": "string"
+}
+```
+
+Example Request:
+```bash
+curl -X POST "https://ashin-cipher-api.vercel.app/decrypt/" \
+-H "Content-Type: application/json" \
+-d '{"text": "AK?KHXI", "key": "secret123"}'
+```
+
+Example Response:
+```json
+{
+    "decrypted_message": "HELLO WORLD"
+}
+```
