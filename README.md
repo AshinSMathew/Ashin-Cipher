@@ -76,7 +76,7 @@ Request Body:
 
 Example Request:
 ```bash
-curl -X POST "https://ashin-cipher-api.vercel.app/decrypt/" \
+curl -X POST "https://ashin-cipher-api.vercel.app/dec/" \
 -H "Content-Type: application/json" \
 -d '{"text": "{cipher_text}", "key": "{secret_key}"}'
 ```
